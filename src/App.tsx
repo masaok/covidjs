@@ -3,6 +3,7 @@ import React from 'react';
 import './App.css';
 
 import Demo from './pages/Demo'
+import DailyUS from './pages/DailyUS'
 
 import {
   BrowserRouter as Router,
@@ -18,6 +19,7 @@ function App() {
         <div>
           <Switch>
             <Route exact path="/" component={Demo} />
+            <Route exact path="/us/daily" component={DailyUS} />
             <Route exact path="/coronavirus/:state" component={Demo} />
           </Switch>
         </div>

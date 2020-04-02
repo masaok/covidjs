@@ -10,4 +10,11 @@ const fetchStates = async () => {
   return response.json()
 }
 
-export { fetchStates }
+const fetchUsDaily = async () => {
+  const path = `/us/daily`
+  const fetchURL = createFetchURL(path)
+  const response = await fetch(fetchURL)
+  return response.json()
+}
+
+export { fetchStates, fetchUsDaily }
