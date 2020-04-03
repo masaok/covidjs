@@ -21,7 +21,7 @@ import { fetchUsDaily } from '../api/endpoints'
 
 import moment from 'moment'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
     background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
     border: 0,
@@ -39,19 +39,19 @@ const useStyles = makeStyles({
   th: {
     fontWeight: 'bold',
     textAlign: 'center',
-    paddingLeft: 6,
-    paddingRight: 6,
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
   },
 
   td: {
     textAlign: 'right',
     whiteSpace: 'nowrap',
     wordWrap: 'break-word',
-    paddingLeft: 6,
-    paddingRight: 6,
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1)
   }
 
-});
+}))
 
 // Interface for incoming props via match.params (URL params)
 interface DailyUSProps {
@@ -86,15 +86,14 @@ interface DailyData {
   hospitalized: number
   hospitalizedIncrease: number
   hospitalizedIncreasePercent: number
-  hospitalizedOverPositivePercent: number
 
   death: number
   deathIncrease: number
   deathIncreasePercent: number
-  deathOverHospitalizedPercent: number
-  deathOverHospitalizedPercentToday: number
 
   total: number  // total tests (pos + neg + pending)
+  totalTestsIncrease: number
+  totalTestsIncreasePercent: number
 }
 
 // Separate interface for list of State objects
@@ -146,6 +145,7 @@ const DailyUS = (props: DailyUSProps) => {
       item.totalTestResultsIncreasePercent = calcIncreasePercent(item, prev, 'totalTestResults')
       item.hospitalizedIncreasePercent = calcIncreasePercent(item, prev, 'hospitalized')
       item.deathIncreasePercent = calcIncreasePercent(item, prev, 'death')
+      item.totalTestsIncreasePercent = calcIncreasePercent(item, prev, 'total')
 
       item.hospitalizedOverPositivePercent = calcRatioPercent(item, 'hospitalized', 'positive')
       item.deathOverHospitalizedPercent = calcRatioPercent(item, 'death', 'hospitalized')
@@ -210,10 +210,8 @@ const DailyUS = (props: DailyUSProps) => {
       <TableCell className={classes.th}>Death Inc</TableCell>
       <TableCell className={classes.th}>Death % Inc</TableCell>
 
-      <TableCell className={classes.th}>Death / Hosp %</TableCell>
-      <TableCell className={classes.th}>Death / Hosp % Today</TableCell>
-
       <TableCell className={classes.th}>Total Tests</TableCell>
+      <TableCell className={classes.th}>Total Tests % Inc</TableCell>
     </TableRow>
   )
 
@@ -249,15 +247,12 @@ const DailyUS = (props: DailyUSProps) => {
             <TableCell className={classes.td}>{numberWithCommas(data.hospitalizedIncrease)}</TableCell>
             <TableCell className={classes.td}>{formatAsPercentage(data.hospitalizedIncreasePercent)}</TableCell>
 
-            {/* <TableCell className={classes.td}>{formatAsPercentage(data.hospitalizedOverPositivePercent)}</TableCell> */}
-
             <TableCell className={classes.td}>{numberWithCommas(data.death)}</TableCell>
             <TableCell className={classes.td}>{numberWithCommas(data.deathIncrease)}</TableCell>
             <TableCell className={classes.td}>{formatAsPercentage(data.deathIncreasePercent)}</TableCell>
-            <TableCell className={classes.td}>{formatAsPercentage(data.deathOverHospitalizedPercent)}</TableCell>
-            <TableCell className={classes.td}>{formatAsPercentage(data.deathOverHospitalizedPercentToday)}</TableCell>
 
             <TableCell className={classes.td}>{numberWithCommas(data.total)}</TableCell>
+            <TableCell className={classes.td}>{formatAsPercentage(data.totalTestsIncreasePercent)}</TableCell>
           </TableRow>
         )
       })

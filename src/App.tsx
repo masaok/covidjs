@@ -1,9 +1,5 @@
 import React from 'react';
-// import logo from './logo.svg';
 import './App.css';
-
-import Demo from './pages/Demo'
-import DailyUS from './pages/DailyUS'
 
 import {
   BrowserRouter as Router,
@@ -11,19 +7,32 @@ import {
   Switch
 } from 'react-router-dom'
 
+// https://material-ui.com/styles/advanced/#theming
+import { ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
+
+import Demo from './pages/Demo'
+import DailyUS from './pages/DailyUS'
+
+// https://material-ui.com/customization/theming/#api
+let theme = createMuiTheme();
+theme = responsiveFontSizes(theme);
+
 function App() {
   return (
     <div className="App">
-      <Router>
-        {/* <div className={classes.root}> */}
-        <div>
-          <Switch>
-            <Route exact path="/" component={Demo} />
-            <Route exact path="/us/daily" component={DailyUS} />
-            <Route exact path="/coronavirus/:state" component={Demo} />
-          </Switch>
-        </div>
-      </Router>
+      <ThemeProvider theme={theme}>
+        <Router>
+          {/* <div className={classes.root}> */}
+          <div>
+            <Switch>
+              <Route exact path="/" component={Demo} />
+              <Route exact path="/us/daily" component={DailyUS} />
+              <Route exact path="/coronavirus/:state" component={Demo} />
+            </Switch>
+          </div>
+        </Router>
+      </ThemeProvider>
     </div>
   );
 }
