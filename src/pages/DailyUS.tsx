@@ -36,8 +36,19 @@ const useStyles = makeStyles({
     // border: `1px solid black`
   },
 
+  th: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingLeft: 6,
+    paddingRight: 6,
+  },
+
   td: {
-    textAlign: 'right'
+    textAlign: 'right',
+    whiteSpace: 'nowrap',
+    wordWrap: 'break-word',
+    paddingLeft: 6,
+    paddingRight: 6,
   }
 
 });
@@ -174,42 +185,40 @@ const DailyUS = (props: DailyUSProps) => {
 
   const tableHeader = (
     <TableRow>
-      <TableCell>Date</TableCell>
-      <TableCell>States Tracked</TableCell>
+      <TableCell className={classes.th}>Date</TableCell>
+      <TableCell className={classes.th}>States Tracked</TableCell>
 
-      <TableCell>Positive</TableCell>
-      <TableCell>+ Inc</TableCell>
-      <TableCell>+ % Inc</TableCell>
+      <TableCell className={classes.th}>Positive</TableCell>
+      <TableCell className={classes.th}>+ Inc</TableCell>
+      <TableCell className={classes.th}>+ % Inc</TableCell>
 
-      <TableCell>Negative</TableCell>
-      <TableCell>- Inc</TableCell>
-      <TableCell>- % Inc</TableCell>
+      <TableCell className={classes.th}>Negative</TableCell>
+      <TableCell className={classes.th}>- Inc</TableCell>
+      <TableCell className={classes.th}>- % Inc</TableCell>
 
-      <TableCell>Pos + Neg</TableCell>
-      <TableCell>+/- Inc</TableCell>
-      <TableCell>+/- % Inc</TableCell>
+      <TableCell className={classes.th}>Pos + Neg</TableCell>
+      <TableCell className={classes.th}>+/- Inc</TableCell>
+      <TableCell className={classes.th}>+/- % Inc</TableCell>
 
-      <TableCell>Pending</TableCell>
+      <TableCell className={classes.th}>Pending</TableCell>
 
-      <TableCell>Hospitalized</TableCell>
-      <TableCell>Hosp Inc</TableCell>
-      <TableCell>Hosp % Inc</TableCell>
+      <TableCell className={classes.th}>Hospitalized</TableCell>
+      <TableCell className={classes.th}>Hosp Inc</TableCell>
+      <TableCell className={classes.th}>Hosp % Inc</TableCell>
 
-      {/* <TableCell>Hosp / Pos %</TableCell> */}
+      <TableCell className={classes.th}>Deaths</TableCell>
+      <TableCell className={classes.th}>Death Inc</TableCell>
+      <TableCell className={classes.th}>Death % Inc</TableCell>
 
-      <TableCell>DeaTableCells</TableCell>
-      <TableCell>DeaTableCell Inc</TableCell>
-      <TableCell>DeaTableCell % Inc</TableCell>
+      <TableCell className={classes.th}>Death / Hosp %</TableCell>
+      <TableCell className={classes.th}>Death / Hosp % Today</TableCell>
 
-      <TableCell>DeaTableCell / Hosp %</TableCell>
-      <TableCell>DeaTableCell / Hosp % Today</TableCell>
-
-      <TableCell>Total Tests</TableCell>
+      <TableCell className={classes.th}>Total Tests</TableCell>
     </TableRow>
   )
 
   const dataRows = loading ? (
-    <tr><td>LOADING</td></tr>
+    <TableRow><TableCell>LOADING</TableCell></TableRow>
   ) : (
       dailyDataList.map(data => {
         console.log(data)
@@ -218,38 +227,38 @@ const DailyUS = (props: DailyUSProps) => {
         const formatted = momentDate.format("ddd MM/DD/YYYY")
 
         return (
-          <tr key={data.date}>
-            <td className={classes.td}>{formatted}</td>
-            <td className={classes.td}>{data.states}</td>
+          <TableRow key={data.date}>
+            <TableCell className={classes.td}>{formatted}</TableCell>
+            <TableCell className={classes.td}>{data.states}</TableCell>
 
-            <td className={classes.td}>{numberWithCommas(data.positive)}</td>
-            <td className={classes.td}>{numberWithCommas(data.positiveIncrease)}</td>
-            <td className={classes.td}>{formatAsPercentage(data.positiveIncreasePercent)}</td>
+            <TableCell className={classes.td}>{numberWithCommas(data.positive)}</TableCell>
+            <TableCell className={classes.td}>{numberWithCommas(data.positiveIncrease)}</TableCell>
+            <TableCell className={classes.td}>{formatAsPercentage(data.positiveIncreasePercent)}</TableCell>
 
-            <td className={classes.td}>{numberWithCommas(data.negative)}</td>
-            <td className={classes.td}>{numberWithCommas(data.negativeIncrease)}</td>
-            <td className={classes.td}>{formatAsPercentage(data.negativeIncreasePercent)}</td>
+            <TableCell className={classes.td}>{numberWithCommas(data.negative)}</TableCell>
+            <TableCell className={classes.td}>{numberWithCommas(data.negativeIncrease)}</TableCell>
+            <TableCell className={classes.td}>{formatAsPercentage(data.negativeIncreasePercent)}</TableCell>
 
-            <td className={classes.td}>{numberWithCommas(data.totalTestResults)}</td>
-            <td className={classes.td}>{numberWithCommas(data.totalTestResultsIncrease)}</td>
-            <td className={classes.td}>{formatAsPercentage(data.totalTestResultsIncreasePercent)}</td>
+            <TableCell className={classes.td}>{numberWithCommas(data.totalTestResults)}</TableCell>
+            <TableCell className={classes.td}>{numberWithCommas(data.totalTestResultsIncrease)}</TableCell>
+            <TableCell className={classes.td}>{formatAsPercentage(data.totalTestResultsIncreasePercent)}</TableCell>
 
-            <td className={classes.td}>{numberWithCommas(data.pending)}</td>
+            <TableCell className={classes.td}>{numberWithCommas(data.pending)}</TableCell>
 
-            <td className={classes.td}>{numberWithCommas(data.hospitalized)}</td>
-            <td className={classes.td}>{numberWithCommas(data.hospitalizedIncrease)}</td>
-            <td className={classes.td}>{formatAsPercentage(data.hospitalizedIncreasePercent)}</td>
+            <TableCell className={classes.td}>{numberWithCommas(data.hospitalized)}</TableCell>
+            <TableCell className={classes.td}>{numberWithCommas(data.hospitalizedIncrease)}</TableCell>
+            <TableCell className={classes.td}>{formatAsPercentage(data.hospitalizedIncreasePercent)}</TableCell>
 
-            {/* <td className={classes.td}>{formatAsPercentage(data.hospitalizedOverPositivePercent)}</td> */}
+            {/* <TableCell className={classes.td}>{formatAsPercentage(data.hospitalizedOverPositivePercent)}</TableCell> */}
 
-            <td className={classes.td}>{numberWithCommas(data.death)}</td>
-            <td className={classes.td}>{numberWithCommas(data.deathIncrease)}</td>
-            <td className={classes.td}>{formatAsPercentage(data.deathIncreasePercent)}</td>
-            <td className={classes.td}>{formatAsPercentage(data.deathOverHospitalizedPercent)}</td>
-            <td className={classes.td}>{formatAsPercentage(data.deathOverHospitalizedPercentToday)}</td>
+            <TableCell className={classes.td}>{numberWithCommas(data.death)}</TableCell>
+            <TableCell className={classes.td}>{numberWithCommas(data.deathIncrease)}</TableCell>
+            <TableCell className={classes.td}>{formatAsPercentage(data.deathIncreasePercent)}</TableCell>
+            <TableCell className={classes.td}>{formatAsPercentage(data.deathOverHospitalizedPercent)}</TableCell>
+            <TableCell className={classes.td}>{formatAsPercentage(data.deathOverHospitalizedPercentToday)}</TableCell>
 
-            <td className={classes.td}>{numberWithCommas(data.total)}</td>
-          </tr>
+            <TableCell className={classes.td}>{numberWithCommas(data.total)}</TableCell>
+          </TableRow>
         )
       })
     )
