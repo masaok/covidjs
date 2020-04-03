@@ -49,12 +49,14 @@ const Demo = (props: DemoProps) => {
 
   return (
     <div className="App">
-      {/* <div>{stateName}</div> */}
-      {/* <div>{statesList}</div> */}
+      <div>{loading}</div>
       <Link to="/us/daily">US Daily</Link>
       <header className="App-header">
         <SimpleLineChart />
       </header>
+      <div>{states.map(item => {
+        return <div>{item.name}</div>
+      })}</div>
     </div>
   )
 }

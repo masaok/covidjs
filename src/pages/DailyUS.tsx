@@ -1,5 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 // import { useSubscription } from '@apollo/react-hooks'
+
+// https://material-ui.com/styles/basics/#hook-api
+import { makeStyles } from '@material-ui/core/styles';
+
+// https://material-ui.com/components/tables/#dense-table
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
 
 // import SimpleLineChart from '../examples/SimpleLineChart'
 import { fetchUsDaily } from '../api/endpoints'
@@ -7,6 +20,27 @@ import { fetchUsDaily } from '../api/endpoints'
 // import { QUERY_DAILY_STATE_DATA } from '../graphql/queries/queryDailyStateData.ts.ignore'
 
 import moment from 'moment'
+
+const useStyles = makeStyles({
+  root: {
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    color: 'white',
+    height: 48,
+    padding: '0 30px',
+  },
+
+  table: {
+    // border: `1px solid black`
+  },
+
+  td: {
+    textAlign: 'right'
+  }
+
+});
 
 // Interface for incoming props via match.params (URL params)
 interface DailyUSProps {
@@ -58,24 +92,15 @@ interface DailyDataList extends Array<DailyData> { }
 
 const DailyUS = (props: DailyUSProps) => {
 
+  const classes = useStyles();
+
+
   // Loading boolean allows UI to change while we wait for data
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   // Typescript requires the type here with useState for non-basic types
   const [dailyDataList, setDailyDataList] = useState<DailyDataList>([])
 
-  useEffect(() => {
-    const retrieveDailyData = async () => {
-      // REST call to fetch all states (unable to do so in GraphQL given the schema)
-      const results = await fetchUsDaily()
-      console.log(results)
-      const processed = processDailyData(results)
-      setDailyDataList(processed)
-      setLoading(false)
-    }
-    setLoading(true)
-    retrieveDailyData()
-  }, [])
 
   const calcRatioPercent = (data: DailyData, numerator: string, denominator: string) => {
     const numValue = data[numerator]
@@ -90,7 +115,7 @@ const DailyUS = (props: DailyUSProps) => {
     return percent
   }
 
-  const processDailyData = (data: DailyDataList) => {
+  const processDailyData = useCallback((data: DailyDataList) => {
     return data.map((item, index) => {
 
       // const
@@ -117,7 +142,7 @@ const DailyUS = (props: DailyUSProps) => {
 
       return item
     })
-  }
+  }, [])
 
   const formatAsPercentage = (percent: number) => {
     return percent > 0 ? Number(percent).toLocaleString(undefined, { style: 'percent', minimumFractionDigits: 2 }) : '';
@@ -127,40 +152,60 @@ const DailyUS = (props: DailyUSProps) => {
     return num ? num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : ''
   }
 
+  const retrieveDailyData = useCallback(async () => {
+    // REST call to fetch all states (unable to do so in GraphQL given the schema)
+    const results = await fetchUsDaily()
+    console.log(results)
+    const processed = processDailyData(results)
+    setDailyDataList(processed)
+    setLoading(false)
+
+    // setLoading(true)
+    // retrieveDailyData()
+  }, [processDailyData])
+
+
+  useEffect(() => {
+    if (loading) {
+      retrieveDailyData()
+    }
+  }, [loading, processDailyData, retrieveDailyData])
+
+
   const tableHeader = (
-    <tr>
-      <th>Date</th>
-      <th>States Tracked</th>
+    <TableRow>
+      <TableCell>Date</TableCell>
+      <TableCell>States Tracked</TableCell>
 
-      <th>Positive</th>
-      <th>+ Inc</th>
-      <th>+ % Inc</th>
+      <TableCell>Positive</TableCell>
+      <TableCell>+ Inc</TableCell>
+      <TableCell>+ % Inc</TableCell>
 
-      <th>Negative</th>
-      <th>- Inc</th>
-      <th>- % Inc</th>
+      <TableCell>Negative</TableCell>
+      <TableCell>- Inc</TableCell>
+      <TableCell>- % Inc</TableCell>
 
-      <th>Pos + Neg</th>
-      <th>+/- Inc</th>
-      <th>+/- % Inc</th>
+      <TableCell>Pos + Neg</TableCell>
+      <TableCell>+/- Inc</TableCell>
+      <TableCell>+/- % Inc</TableCell>
 
-      <th>Pending</th>
+      <TableCell>Pending</TableCell>
 
-      <th>Hospitalized</th>
-      <th>Hosp Inc</th>
-      <th>Hosp % Inc</th>
+      <TableCell>Hospitalized</TableCell>
+      <TableCell>Hosp Inc</TableCell>
+      <TableCell>Hosp % Inc</TableCell>
 
-      {/* <th>Hosp / Pos %</th> */}
+      {/* <TableCell>Hosp / Pos %</TableCell> */}
 
-      <th>Deaths</th>
-      <th>Death Inc</th>
-      <th>Death % Inc</th>
+      <TableCell>DeaTableCells</TableCell>
+      <TableCell>DeaTableCell Inc</TableCell>
+      <TableCell>DeaTableCell % Inc</TableCell>
 
-      <th>Death / Hosp %</th>
-      <th>Death / Hosp % Today</th>
+      <TableCell>DeaTableCell / Hosp %</TableCell>
+      <TableCell>DeaTableCell / Hosp % Today</TableCell>
 
-      <th>Total Tests</th>
-    </tr>
+      <TableCell>Total Tests</TableCell>
+    </TableRow>
   )
 
   const dataRows = loading ? (
@@ -174,36 +219,36 @@ const DailyUS = (props: DailyUSProps) => {
 
         return (
           <tr key={data.date}>
-            <td>{formatted}</td>
-            <td>{data.states}</td>
+            <td className={classes.td}>{formatted}</td>
+            <td className={classes.td}>{data.states}</td>
 
-            <td>{numberWithCommas(data.positive)}</td>
-            <td>{numberWithCommas(data.positiveIncrease)}</td>
-            <td>{formatAsPercentage(data.positiveIncreasePercent)}</td>
+            <td className={classes.td}>{numberWithCommas(data.positive)}</td>
+            <td className={classes.td}>{numberWithCommas(data.positiveIncrease)}</td>
+            <td className={classes.td}>{formatAsPercentage(data.positiveIncreasePercent)}</td>
 
-            <td>{numberWithCommas(data.negative)}</td>
-            <td>{numberWithCommas(data.negativeIncrease)}</td>
-            <td>{formatAsPercentage(data.negativeIncreasePercent)}</td>
+            <td className={classes.td}>{numberWithCommas(data.negative)}</td>
+            <td className={classes.td}>{numberWithCommas(data.negativeIncrease)}</td>
+            <td className={classes.td}>{formatAsPercentage(data.negativeIncreasePercent)}</td>
 
-            <td>{numberWithCommas(data.totalTestResults)}</td>
-            <td>{numberWithCommas(data.totalTestResultsIncrease)}</td>
-            <td>{formatAsPercentage(data.totalTestResultsIncreasePercent)}</td>
+            <td className={classes.td}>{numberWithCommas(data.totalTestResults)}</td>
+            <td className={classes.td}>{numberWithCommas(data.totalTestResultsIncrease)}</td>
+            <td className={classes.td}>{formatAsPercentage(data.totalTestResultsIncreasePercent)}</td>
 
-            <td>{numberWithCommas(data.pending)}</td>
+            <td className={classes.td}>{numberWithCommas(data.pending)}</td>
 
-            <td>{numberWithCommas(data.hospitalized)}</td>
-            <td>{numberWithCommas(data.hospitalizedIncrease)}</td>
-            <td>{formatAsPercentage(data.hospitalizedIncreasePercent)}</td>
+            <td className={classes.td}>{numberWithCommas(data.hospitalized)}</td>
+            <td className={classes.td}>{numberWithCommas(data.hospitalizedIncrease)}</td>
+            <td className={classes.td}>{formatAsPercentage(data.hospitalizedIncreasePercent)}</td>
 
-            {/* <td>{formatAsPercentage(data.hospitalizedOverPositivePercent)}</td> */}
+            {/* <td className={classes.td}>{formatAsPercentage(data.hospitalizedOverPositivePercent)}</td> */}
 
-            <td>{numberWithCommas(data.death)}</td>
-            <td>{numberWithCommas(data.deathIncrease)}</td>
-            <td>{formatAsPercentage(data.deathIncreasePercent)}</td>
-            <td>{formatAsPercentage(data.deathOverHospitalizedPercent)}</td>
-            <td>{formatAsPercentage(data.deathOverHospitalizedPercentToday)}</td>
+            <td className={classes.td}>{numberWithCommas(data.death)}</td>
+            <td className={classes.td}>{numberWithCommas(data.deathIncrease)}</td>
+            <td className={classes.td}>{formatAsPercentage(data.deathIncreasePercent)}</td>
+            <td className={classes.td}>{formatAsPercentage(data.deathOverHospitalizedPercent)}</td>
+            <td className={classes.td}>{formatAsPercentage(data.deathOverHospitalizedPercentToday)}</td>
 
-            <td>{numberWithCommas(data.total)}</td>
+            <td className={classes.td}>{numberWithCommas(data.total)}</td>
           </tr>
         )
       })
@@ -213,14 +258,16 @@ const DailyUS = (props: DailyUSProps) => {
     <div className="App">
       {/* <div>{stateName}</div>
       <div>{statesList}</div> */}
-      <table>
-        <thead>
-          {tableHeader}
-        </thead>
-        <tbody>
-          {dataRows}
-        </tbody>
-      </table>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} size="small" aria-label="main table">
+          <TableHead>
+            {tableHeader}
+          </TableHead>
+          <TableBody>
+            {dataRows}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }
