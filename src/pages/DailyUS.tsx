@@ -150,11 +150,12 @@ const DailyUS = (props: DailyUSProps) => {
       <th>Hosp Inc</th>
       <th>Hosp % Inc</th>
 
-      <th>Hosp / Pos %</th>
+      {/* <th>Hosp / Pos %</th> */}
 
       <th>Deaths</th>
       <th>Death Inc</th>
       <th>Death % Inc</th>
+
       <th>Death / Hosp %</th>
       <th>Death / Hosp % Today</th>
 
@@ -194,7 +195,7 @@ const DailyUS = (props: DailyUSProps) => {
             <td>{numberWithCommas(data.hospitalizedIncrease)}</td>
             <td>{formatAsPercentage(data.hospitalizedIncreasePercent)}</td>
 
-            <td>{formatAsPercentage(data.hospitalizedOverPositivePercent)}</td>
+            {/* <td>{formatAsPercentage(data.hospitalizedOverPositivePercent)}</td> */}
 
             <td>{numberWithCommas(data.death)}</td>
             <td>{numberWithCommas(data.deathIncrease)}</td>
