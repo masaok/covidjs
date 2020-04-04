@@ -1,6 +1,0 @@
-{
-    "editor.formatOnSave": true,
-    "files.trimTrailingWhitespace": true,
-    "vim.ignorecase": false,
-    "vim.smartcase": false
-}
