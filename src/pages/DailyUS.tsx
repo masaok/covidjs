@@ -212,7 +212,7 @@ const DailyUS = (props: DailyUSProps) => {
       <TableCell className={classes.th}>+/- Inc</TableCell>
       <TableCell className={classes.th}>+/- % Inc</TableCell>
 
-      <TableCell className={classes.tha}>Pending</TableCell>
+      <TableCell className={classes.tha}>Pending Tests</TableCell>
 
       <TableCell className={classes.tha}>Hospitalized</TableCell>
       <TableCell className={classes.th}>Hosp Inc</TableCell>
