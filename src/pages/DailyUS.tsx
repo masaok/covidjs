@@ -13,13 +13,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-
-// import SimpleLineChart from '../examples/SimpleLineChart'
-import { fetchUsDaily } from '../api/endpoints'
-// import { GET_DAILY_STATE_DATA_SUBSCRIPTION } from '../graphql/queries/getDailyStateData'
-// import { QUERY_DAILY_STATE_DATA } from '../graphql/queries/queryDailyStateData.ts.ignore'
-
 import moment from 'moment'
+
+import { fetchUsDaily } from '../api/endpoints'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,22 +39,35 @@ const useStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(1),
   },
 
+  tha: { // existing column header shown on CovidTracking.com
+    backgroundColor: theme.palette.grey[100],
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
+  },
+
   td: {
     textAlign: 'right',
     whiteSpace: 'nowrap',
     wordWrap: 'break-word',
     paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1)
+    paddingRight: theme.spacing(1),
+  },
+
+  tda: { // existing data shown on CovidTracking.com
+    backgroundColor: theme.palette.grey[100],
+    textAlign: 'right',
+    whiteSpace: 'nowrap',
+    wordWrap: 'break-word',
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
   }
 
 }))
 
 // Interface for incoming props via match.params (URL params)
 interface DailyUSProps {
-}
-
-interface PositiveKey {
-
 }
 
 interface DailyData {
@@ -170,9 +179,6 @@ const DailyUS = (props: DailyUSProps) => {
     const processed = processDailyData(results)
     setDailyDataList(processed)
     setLoading(false)
-
-    // setLoading(true)
-    // retrieveDailyData()
   }, [processDailyData])
 
 
@@ -185,32 +191,32 @@ const DailyUS = (props: DailyUSProps) => {
 
   const tableHeader = (
     <TableRow>
-      <TableCell className={classes.th}>Date</TableCell>
-      <TableCell className={classes.th}>States Tracked</TableCell>
+      <TableCell className={classes.tha}>Date</TableCell>
+      <TableCell className={classes.tha}>States Tracked</TableCell>
 
-      <TableCell className={classes.th}>Positive</TableCell>
+      <TableCell className={classes.tha}>Positive</TableCell>
       <TableCell className={classes.th}>+ Inc</TableCell>
       <TableCell className={classes.th}>+ % Inc</TableCell>
 
-      <TableCell className={classes.th}>Negative</TableCell>
+      <TableCell className={classes.tha}>Negative</TableCell>
       <TableCell className={classes.th}>- Inc</TableCell>
       <TableCell className={classes.th}>- % Inc</TableCell>
 
-      <TableCell className={classes.th}>Pos + Neg</TableCell>
+      <TableCell className={classes.tha}>Pos + Neg</TableCell>
       <TableCell className={classes.th}>+/- Inc</TableCell>
       <TableCell className={classes.th}>+/- % Inc</TableCell>
 
-      <TableCell className={classes.th}>Pending</TableCell>
+      <TableCell className={classes.tha}>Pending</TableCell>
 
-      <TableCell className={classes.th}>Hospitalized</TableCell>
+      <TableCell className={classes.tha}>Hospitalized</TableCell>
       <TableCell className={classes.th}>Hosp Inc</TableCell>
       <TableCell className={classes.th}>Hosp % Inc</TableCell>
 
-      <TableCell className={classes.th}>Deaths</TableCell>
+      <TableCell className={classes.tha}>Deaths</TableCell>
       <TableCell className={classes.th}>Death Inc</TableCell>
       <TableCell className={classes.th}>Death % Inc</TableCell>
 
-      <TableCell className={classes.th}>Total Tests</TableCell>
+      <TableCell className={classes.tha}>Total Tests</TableCell>
       <TableCell className={classes.th}>Total Tests % Inc</TableCell>
     </TableRow>
   )
@@ -226,32 +232,32 @@ const DailyUS = (props: DailyUSProps) => {
 
         return (
           <TableRow key={data.date}>
-            <TableCell className={classes.td}>{formatted}</TableCell>
-            <TableCell className={classes.td}>{data.states}</TableCell>
+            <TableCell className={classes.tda}>{formatted}</TableCell>
+            <TableCell className={classes.tda}>{data.states}</TableCell>
 
-            <TableCell className={classes.td}>{numberWithCommas(data.positive)}</TableCell>
+            <TableCell className={classes.tda}>{numberWithCommas(data.positive)}</TableCell>
             <TableCell className={classes.td}>{numberWithCommas(data.positiveIncrease)}</TableCell>
             <TableCell className={classes.td}>{formatAsPercentage(data.positiveIncreasePercent)}</TableCell>
 
-            <TableCell className={classes.td}>{numberWithCommas(data.negative)}</TableCell>
+            <TableCell className={classes.tda}>{numberWithCommas(data.negative)}</TableCell>
             <TableCell className={classes.td}>{numberWithCommas(data.negativeIncrease)}</TableCell>
             <TableCell className={classes.td}>{formatAsPercentage(data.negativeIncreasePercent)}</TableCell>
 
-            <TableCell className={classes.td}>{numberWithCommas(data.totalTestResults)}</TableCell>
+            <TableCell className={classes.tda}>{numberWithCommas(data.totalTestResults)}</TableCell>
             <TableCell className={classes.td}>{numberWithCommas(data.totalTestResultsIncrease)}</TableCell>
             <TableCell className={classes.td}>{formatAsPercentage(data.totalTestResultsIncreasePercent)}</TableCell>
 
-            <TableCell className={classes.td}>{numberWithCommas(data.pending)}</TableCell>
+            <TableCell className={classes.tda}>{numberWithCommas(data.pending)}</TableCell>
 
-            <TableCell className={classes.td}>{numberWithCommas(data.hospitalized)}</TableCell>
+            <TableCell className={classes.tda}>{numberWithCommas(data.hospitalized)}</TableCell>
             <TableCell className={classes.td}>{numberWithCommas(data.hospitalizedIncrease)}</TableCell>
             <TableCell className={classes.td}>{formatAsPercentage(data.hospitalizedIncreasePercent)}</TableCell>
 
-            <TableCell className={classes.td}>{numberWithCommas(data.death)}</TableCell>
+            <TableCell className={classes.tda}>{numberWithCommas(data.death)}</TableCell>
             <TableCell className={classes.td}>{numberWithCommas(data.deathIncrease)}</TableCell>
             <TableCell className={classes.td}>{formatAsPercentage(data.deathIncreasePercent)}</TableCell>
 
-            <TableCell className={classes.td}>{numberWithCommas(data.total)}</TableCell>
+            <TableCell className={classes.tda}>{numberWithCommas(data.total)}</TableCell>
             <TableCell className={classes.td}>{formatAsPercentage(data.totalTestsIncreasePercent)}</TableCell>
           </TableRow>
         )
