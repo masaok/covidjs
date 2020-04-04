@@ -3,11 +3,6 @@
  */
 import { fetchStates } from './endpoints'
 
-interface Summoner {
-  id: string
-  name: string
-}
-
 // https://covidtracking.com/api/states/info
 describe('fetchStates', () => {
   it('fetches properly', async () => {

@@ -52,6 +52,10 @@ const Demo = (props: DemoProps) => {
       <div>{loading}</div>
       <Link to="/us/daily">US Daily</Link>
       <div>Build 1001</div>
+      <div>Commit ID: {process.env.AWS_COMMIT_ID}</div>
+      <div>Job ID: {process.env.AWS_JOB_ID}</div>
+      <div>Branch: {process.env.AWS_BRANCH}</div>
+      <div>App ID: {process.env.AWS_APP_ID}</div>
       <header className="App-header">
         <SimpleLineChart />
       </header>
