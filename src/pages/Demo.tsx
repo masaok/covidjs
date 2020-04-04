@@ -51,6 +51,7 @@ const Demo = (props: DemoProps) => {
     <div className="App">
       <div>{loading}</div>
       <Link to="/us/daily">US Daily</Link>
+      <div>Build 1001</div>
       <header className="App-header">
         <SimpleLineChart />
       </header>
