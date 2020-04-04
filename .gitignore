@@ -3,9 +3,6 @@
 # dev
 .vscode
 
-# generated
-public
-
 # dependencies
 /node_modules
 /.pnp
