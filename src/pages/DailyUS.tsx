@@ -4,6 +4,11 @@ import React, { useState, useEffect, useCallback } from 'react'
 // https://material-ui.com/styles/basics/#hook-api
 import { makeStyles } from '@material-ui/core/styles';
 
+// https://recharts.org/en-US/examples/SimpleLineChart
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+} from 'recharts'
+
 // https://material-ui.com/components/tables/#dense-table
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -139,8 +144,8 @@ const DailyUS = (props: DailyUSProps) => {
 
       // const
 
-      console.log(index)
-      console.log(item)
+      // console.log(index)
+      // console.log(item)
 
       // const currPositive = item.positive ? item.positive : 0
 
@@ -175,8 +180,9 @@ const DailyUS = (props: DailyUSProps) => {
   const retrieveDailyData = useCallback(async () => {
     // REST call to fetch all states (unable to do so in GraphQL given the schema)
     const results = await fetchUsDaily()
-    console.log(results)
+    // console.log(results)
     const processed = processDailyData(results)
+    console.log(processed)
     setDailyDataList(processed)
     setLoading(false)
   }, [processDailyData])
@@ -225,7 +231,7 @@ const DailyUS = (props: DailyUSProps) => {
     <TableRow><TableCell>LOADING</TableCell></TableRow>
   ) : (
       dailyDataList.map(data => {
-        console.log(data)
+        // console.log(data)
 
         const momentDate = moment(data.date, "YYYYMMDD")
         const formatted = momentDate.format("ddd MM/DD/YYYY")
@@ -264,10 +270,48 @@ const DailyUS = (props: DailyUSProps) => {
       })
     )
 
+  const data = [
+    {
+      name: 'Page A', uv: 4000, pv: 2400, amt: 2400,
+    },
+    {
+      name: 'Page B', uv: 3000, pv: 1398, amt: 2210,
+    },
+    {
+      name: 'Page C', uv: 2000, pv: 9800, amt: 2290,
+    },
+    {
+      name: 'Page D', uv: 2780, pv: 3908, amt: 2000,
+    },
+    {
+      name: 'Page E', uv: 1890, pv: 4800, amt: 2181,
+    },
+    {
+      name: 'Page F', uv: 2390, pv: 3800, amt: 2500,
+    },
+    {
+      name: 'Page G', uv: 3490, pv: 4300, amt: 2100,
+    },
+  ];
+
   return (
-    <div className="App">
-      {/* <div>{stateName}</div>
-      <div>{statesList}</div> */}
+    <>
+      <LineChart
+        width={500}
+        height={300}
+        data={dailyDataList.reverse()}
+        margin={{
+          top: 5, right: 30, left: 20, bottom: 5,
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="date" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Line type="monotone" dataKey="positive" stroke="#8884d8" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="negative" stroke="#82ca9d" />
+      </LineChart>
       <TableContainer component={Paper}>
         <Table className={classes.table} size="small" aria-label="main table">
           <TableHead>
@@ -278,7 +322,7 @@ const DailyUS = (props: DailyUSProps) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </>
   )
 }
 
