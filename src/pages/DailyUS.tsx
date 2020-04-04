@@ -297,9 +297,9 @@ const DailyUS = (props: DailyUSProps) => {
   return (
     <>
       <LineChart
-        width={500}
+        width={800}
         height={300}
-        data={dailyDataList.reverse()}
+        data={dailyDataList.slice().reverse()}
         margin={{
           top: 5, right: 30, left: 20, bottom: 5,
         }}
@@ -312,6 +312,7 @@ const DailyUS = (props: DailyUSProps) => {
         <Line type="monotone" dataKey="positive" stroke="#8884d8" activeDot={{ r: 8 }} />
         <Line type="monotone" dataKey="negative" stroke="#82ca9d" />
       </LineChart>
+
       <TableContainer component={Paper}>
         <Table className={classes.table} size="small" aria-label="main table">
           <TableHead>
