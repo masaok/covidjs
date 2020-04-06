@@ -50,7 +50,6 @@ const Demo = (props: DemoProps) => {
   return (
     <div className="App">
       <div>{loading}</div>
-      <Link to="/us/daily">US Daily</Link>
       <div>Commit ID: {process.env.AWS_COMMIT_ID}</div>
       <div>Job ID: {process.env.AWS_JOB_ID}</div>
       <div>Branch: {process.env.AWS_BRANCH}</div>

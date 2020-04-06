@@ -289,9 +289,9 @@ const DailyUS = (props: DailyUSProps) => {
           {/* <Line type="monotone" dataKey="positive" stroke="#8884d8" /> */}
           {/* <Line type="monotone" dataKey="negative" stroke="#82ca9d" /> */}
 
-          <Line dataKey="negative" stroke="green" />
-          {/* <Line dataKey="positive" stroke="red" /> */}
-          {/* <Line dataKey="hospitalized" stroke="purple" /> */}
+          {/* <Line dataKey="negative" stroke="green" /> */}
+          <Line dataKey="positive" stroke="red" />
+          <Line dataKey="hospitalized" stroke="purple" />
           <Line dataKey="death" stroke="black" />
 
           <Line dataKey="hospitalizedIncrease" stroke="purple" />

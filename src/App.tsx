@@ -1,4 +1,5 @@
 import React from 'react';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import './App.css';
 
 import {
@@ -9,26 +10,52 @@ import {
 
 // https://material-ui.com/styles/advanced/#theming
 import { ThemeProvider } from '@material-ui/core/styles';
-import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
+import { makeStyles, createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
+
+import Header from './components/Header'
+import Footer from './components/Footer'
 
 import Demo from './pages/Demo'
 import DailyUS from './pages/DailyUS'
 
 // https://material-ui.com/customization/theming/#api
-let theme = createMuiTheme();
+let theme = createMuiTheme({
+  typography: {
+    fontFamily: [
+      'Roboto',
+    ].join(',')
+  }
+});
 theme = responsiveFontSizes(theme);
 
-function App() {
+const useStyles = makeStyles(theme => ({
+  root: {
+    // overflowY: 'scroll'
+  },
+}))
+
+const App = (props: object) => {
+  const classes = useStyles(props)
+
   return (
-    <div className="App">
+    <div className={classes.root}>
       <ThemeProvider theme={theme}>
+        {/* https://material-ui.com/components/css-baseline/ */}
+        <CssBaseline />
         <Router>
           {/* <div className={classes.root}> */}
           <div>
             <Switch>
-              <Route exact path="/" component={Demo} />
+              <Route component={Header} />
+            </Switch>
+            <Switch>
+              {/* <Route exact path="/" component={Demo} /> */}
+              <Route exact path="/" component={DailyUS} />
               <Route exact path="/us/daily" component={DailyUS} />
               <Route exact path="/coronavirus/:state" component={Demo} />
+            </Switch>
+            <Switch>
+              <Route component={Footer} />
             </Switch>
           </div>
         </Router>
