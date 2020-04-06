@@ -9,6 +9,15 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts'
 
+// Chart Control Checkboxes
+// https://material-ui.com/components/checkboxes/
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Checkbox from '@material-ui/core/Checkbox';
+
 // https://material-ui.com/components/tables/#dense-table
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -21,6 +30,9 @@ import Paper from '@material-ui/core/Paper';
 import moment from 'moment'
 
 import { fetchUsDaily } from '../api/endpoints'
+
+// Advanced Data Tables display/interaction
+import MUIDataTable from 'mui-datatables'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -67,7 +79,16 @@ const useStyles = makeStyles(theme => ({
     wordWrap: 'break-word',
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
-  }
+  },
+
+  formContainer: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+
+  formControl: {
+    margin: theme.spacing(3),
+  },
 
 }))
 
@@ -270,6 +291,26 @@ const DailyUS = (props: DailyUSProps) => {
       })
     )
 
+  // console.log(dailyDataList)
+
+  const columns = ["Name", "Company", "City", "State"];
+
+  const data = [
+    ["Joe James", "Test Corp", "Yonkers", "NY"],
+    ["John Walsh", "Test Corp", "Hartford", "CT"],
+    ["Bob Herm", "Test Corp", "Tampa", "FL"],
+    ["James Houston", "Test Corp", "Dallas", "TX"],
+  ];
+
+  const opts = {
+    // filterType: 'checkbox',
+    download: false,
+    print: false,
+    search: false,
+    selectableRows: "none" as any
+  };
+
+
   return (
     <>
       <ResponsiveContainer width='100%' aspect={16.0 / 5.0}>
@@ -300,6 +341,46 @@ const DailyUS = (props: DailyUSProps) => {
         </LineChart>
       </ResponsiveContainer>
 
+      <div className={classes.formContainer}>
+        <FormControl component="fieldset" className={classes.formControl}>
+          <FormLabel component="legend">Assign responsibility</FormLabel>
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox name="gilad" />}
+              label="Gilad Gray"
+            />
+            <FormControlLabel
+              control={<Checkbox name="jason" />}
+              label="Jason Killian"
+            />
+            <FormControlLabel
+              control={<Checkbox name="antoine" />}
+              label="Antoine Llorca"
+            />
+          </FormGroup>
+          <FormHelperText>Be careful</FormHelperText>
+        </FormControl>
+
+        <FormControl required component="fieldset" className={classes.formControl}>
+          <FormLabel component="legend">Pick two</FormLabel>
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox name="gilad" />}
+              label="Gilad Gray"
+            />
+            <FormControlLabel
+              control={<Checkbox name="jason" />}
+              label="Jason Killian"
+            />
+            <FormControlLabel
+              control={<Checkbox name="antoine" />}
+              label="Antoine Llorca"
+            />
+          </FormGroup>
+          <FormHelperText>You can display an error</FormHelperText>
+        </FormControl>
+      </div>
+
       <TableContainer component={Paper}>
         <Table className={classes.table} size="small" aria-label="main table">
           <TableHead>
@@ -310,6 +391,15 @@ const DailyUS = (props: DailyUSProps) => {
           </TableBody>
         </Table>
       </TableContainer>
+
+
+      {/* https://github.com/gregnb/mui-datatables */}
+      <MUIDataTable
+        title={"Datatables Placeholder"}
+        data={data}
+        columns={columns}
+        options={opts}
+      />
     </>
   )
 }

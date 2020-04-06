@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react'
 import SimpleLineChart from '../examples/SimpleLineChart'
 import { fetchStates } from '../api/endpoints'
 
-import { Link } from "react-router-dom";
-
 // Interface for incoming props via match.params (URL params)
 interface DemoProps {
   match: {
