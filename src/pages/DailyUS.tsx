@@ -313,7 +313,7 @@ const DailyUS = (props: DailyUSProps) => {
 
   return (
     <>
-      <ResponsiveContainer width='100%' aspect={16.0 / 5.0}>
+      <ResponsiveContainer width='100%' height='100' aspect={16.0 / 5.0}>
         <LineChart
           data={dailyDataList.slice().reverse()}
           margin={{
