@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 // import { useSubscription } from '@apollo/react-hooks'
 
 // https://material-ui.com/styles/basics/#hook-api
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles'
 
 // https://recharts.org/en-US/examples/SimpleLineChart
 import {
@@ -11,21 +11,21 @@ import {
 
 // Chart Control Checkboxes
 // https://material-ui.com/components/checkboxes/
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Checkbox from '@material-ui/core/Checkbox';
+import FormLabel from '@material-ui/core/FormLabel'
+import FormControl from '@material-ui/core/FormControl'
+import FormGroup from '@material-ui/core/FormGroup'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import Checkbox from '@material-ui/core/Checkbox'
 
 // https://material-ui.com/components/tables/#dense-table
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import Paper from '@material-ui/core/Paper'
 
 import moment from 'moment'
 
@@ -137,7 +137,7 @@ interface DailyDataList extends Array<DailyData> { }
 
 const DailyUS = (props: DailyUSProps) => {
 
-  const classes = useStyles();
+  const classes = useStyles()
 
 
   // Loading boolean allows UI to change while we wait for data
@@ -191,7 +191,7 @@ const DailyUS = (props: DailyUSProps) => {
   }, [])
 
   const formatAsPercentage = (percent: number) => {
-    return percent > 0 ? Number(percent).toLocaleString(undefined, { style: 'percent', minimumFractionDigits: 2 }) : '';
+    return percent > 0 ? Number(percent).toLocaleString(undefined, { style: 'percent', minimumFractionDigits: 2 }) : ''
   }
 
   const numberWithCommas = (num: number) => {
@@ -203,7 +203,8 @@ const DailyUS = (props: DailyUSProps) => {
     const results = await fetchUsDaily()
     // console.log(results)
     const processed = processDailyData(results)
-    console.log(processed)
+    // console.log(processed)
+
     setDailyDataList(processed)
     setLoading(false)
   }, [processDailyData])
@@ -293,14 +294,14 @@ const DailyUS = (props: DailyUSProps) => {
 
   // console.log(dailyDataList)
 
-  const columns = ["Name", "Company", "City", "State"];
+  const columns = ["Name", "Company", "City", "State"]
 
   const data = [
     ["Joe James", "Test Corp", "Yonkers", "NY"],
     ["John Walsh", "Test Corp", "Hartford", "CT"],
     ["Bob Herm", "Test Corp", "Tampa", "FL"],
     ["James Houston", "Test Corp", "Dallas", "TX"],
-  ];
+  ]
 
   const opts = {
     // filterType: 'checkbox',
@@ -308,12 +309,12 @@ const DailyUS = (props: DailyUSProps) => {
     print: false,
     search: false,
     selectableRows: "none" as any
-  };
+  }
 
 
   return (
     <>
-      <ResponsiveContainer width='100%' height='100' aspect={16.0 / 5.0}>
+      <ResponsiveContainer width='100%' height='100%' aspect={16.0 / 5.0}>
         <LineChart
           data={dailyDataList.slice().reverse()}
           margin={{

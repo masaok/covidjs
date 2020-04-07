@@ -34,7 +34,7 @@ const Demo = (props: DemoProps) => {
     const retrieveStates = async () => {
       // REST call to fetch all states (unable to do so in GraphQL given the schema)
       const results = await fetchStates()
-      console.log(results)
+      // console.log(results)
       setStates(results)
       setLoading(false)
     }
