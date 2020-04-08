@@ -139,11 +139,17 @@ interface DataKeys {
   positive: boolean
   positiveIncrease: boolean
   positiveIncreasePercent: boolean
+
+  hospitalized: boolean
+  hospitalizedIncrease: boolean
+  hospitalizedIncreasePercent: boolean
 }
 
-const toHex = (str: string) => {
-  var hash = 0
-  if (str.length === 0) return hash
+// Any string to hex color
+// https://gist.github.com/0x263b/2bdd90886c2036a1ad5bcf06d6e6fb37
+const toHex = (str: string): string => {
+  let hash = 0
+  if (str.length === 0) return hash.toString()
   for (var i = 0; i < str.length; i++) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash)
     hash = hash & hash
@@ -156,6 +162,14 @@ const toHex = (str: string) => {
   return color
 }
 
+// TODO: Change color lighter/darker (currently not working)
+// https://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors
+const changeColorBrightness = (col: string, amt: number): string => {
+  const color = parseInt(col, 16)
+  return (((color & 0x0000FF) + amt) | ((((color >> 8) & 0x00FF) + amt) << 8) | (((color >> 16) + amt) << 16)).toString(16)
+}
+
+
 const DailyUS = (props: DailyUSProps) => {
 
   const classes = useStyles()
@@ -165,9 +179,15 @@ const DailyUS = (props: DailyUSProps) => {
 
   // useState with Typescript Type: https://www.carlrippon.com/typed-usestate-with-typescript/
   const [dataKeys, setDataKeys] = useState<DataKeys>({
-    positive: false,
+    positive: true,
     positiveIncrease: false,
-    positiveIncreasePercent: false
+    positiveIncreasePercent: false,
+    hospitalized: true,
+    hospitalizedIncrease: false,
+    hospitalizedIncreasePercent: false,
+    death: true,
+    deathIncrease: false,
+    deathIncreasePercent: false
   })
   // const [dataKeys, setDataKeys] = useState({})
 
@@ -375,11 +395,11 @@ const DailyUS = (props: DailyUSProps) => {
 
           {/* <Line dataKey="negative" stroke="green" /> */}
           {/* <Line dataKey="positive" stroke="red" /> */}
-          <Line dataKey="hospitalized" stroke="purple" />
-          <Line dataKey="death" stroke="black" />
+          {/* <Line dataKey="hospitalized" stroke="purple" />
+          <Line dataKey="death" stroke="black" /> */}
 
-          <Line dataKey="hospitalizedIncrease" stroke="purple" />
-          <Line dataKey="deathIncrease" stroke="purple" />
+          {/* <Line dataKey="hospitalizedIncrease" stroke="purple" />
+          <Line dataKey="deathIncrease" stroke="purple" /> */}
 
           {Object.keys(dataKeys).map((key: string) => {
             console.log(key)
@@ -389,7 +409,12 @@ const DailyUS = (props: DailyUSProps) => {
             console.log(toHex(key))
 
             const hexColor = toHex(key)
-            return value ? <Line dataKey={key} stroke={hexColor} /> : ''
+            // const finalColor = changeColorBrightness(hexColor, -2)
+            return value ? (
+              <Line dataKey={key} stroke={hexColor}
+                animationDuration={500}
+              />
+            ) : ''
             // return <div>test</div>
           })}
 
@@ -400,20 +425,31 @@ const DailyUS = (props: DailyUSProps) => {
         <FormControl component="fieldset" className={classes.formControl}>
           <FormLabel component="legend">Cumulative</FormLabel>
           <FormGroup>
+
+            {/* TODO: make select/deselect all work */}
             <FormControlLabel
               control={<Checkbox name="allCumulative" />}
               label="Select All"
             />
+
+            {/* TODO: refactor to generate labels/checkboxes programmatically */}
             <FormControlLabel
-              control={<Checkbox name="positive" onChange={e => handleCheck(e)} />}
+              control={
+                <Checkbox name="positive"
+                  checked={dataKeys['positive']} onChange={e => handleCheck(e)} />
+              }
               label="Positive"
             />
             <FormControlLabel
-              control={<Checkbox name="hospitalized" />}
+              control={
+                <Checkbox name="hospitalized"
+                  checked={dataKeys['hospitalized']} onChange={e => handleCheck(e)} />}
               label="Hospitalized"
             />
             <FormControlLabel
-              control={<Checkbox name="death" />}
+              control={
+                <Checkbox name="death"
+                  checked={dataKeys['death']} onChange={e => handleCheck(e)} />}
               label="Deaths"
             />
           </FormGroup>
