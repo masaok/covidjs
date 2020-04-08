@@ -15,7 +15,6 @@ import FormLabel from '@material-ui/core/FormLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormHelperText from '@material-ui/core/FormHelperText'
 import Checkbox from '@material-ui/core/Checkbox'
 
 // https://material-ui.com/components/tables/#dense-table
@@ -135,13 +134,42 @@ interface DailyData {
 // https://stackoverflow.com/questions/25469244/how-can-i-define-an-interface-for-an-array-of-objects-with-typescript/25470775
 interface DailyDataList extends Array<DailyData> { }
 
+interface DataKeys {
+  [placeholder: string]: boolean // allows for variable key access
+  positive: boolean
+  positiveIncrease: boolean
+  positiveIncreasePercent: boolean
+}
+
+const toHex = (str: string) => {
+  var hash = 0
+  if (str.length === 0) return hash
+  for (var i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash)
+    hash = hash & hash
+  }
+  var color = '#'
+  for (var i = 0; i < 3; i++) {
+    var value = (hash >> (i * 8)) & 255
+    color += ('00' + value.toString(16)).substr(-2)
+  }
+  return color
+}
+
 const DailyUS = (props: DailyUSProps) => {
 
   const classes = useStyles()
 
-
   // Loading boolean allows UI to change while we wait for data
   const [loading, setLoading] = useState(true)
+
+  // useState with Typescript Type: https://www.carlrippon.com/typed-usestate-with-typescript/
+  const [dataKeys, setDataKeys] = useState<DataKeys>({
+    positive: false,
+    positiveIncrease: false,
+    positiveIncreasePercent: false
+  })
+  // const [dataKeys, setDataKeys] = useState({})
 
   // Typescript requires the type here with useState for non-basic types
   const [dailyDataList, setDailyDataList] = useState<DailyDataList>([])
@@ -210,12 +238,27 @@ const DailyUS = (props: DailyUSProps) => {
   }, [processDailyData])
 
 
+  // Form Handling
+  const handleCheck = (event: any) => {
+    console.log(event.target.name)
+    console.log(event.target.checked)
+
+    const newKeys = {
+      ...dataKeys,
+      [event.target.name]: event.target.checked
+    }
+
+    console.log(newKeys)
+
+    setDataKeys(newKeys)
+  }
+
+  // Effects
   useEffect(() => {
     if (loading) {
       retrieveDailyData()
     }
   }, [loading, processDailyData, retrieveDailyData])
-
 
   const tableHeader = (
     <TableRow>
@@ -311,7 +354,6 @@ const DailyUS = (props: DailyUSProps) => {
     selectableRows: "none" as any
   }
 
-
   return (
     <>
       <ResponsiveContainer width='100%' height='100%' aspect={16.0 / 5.0}>
@@ -332,53 +374,93 @@ const DailyUS = (props: DailyUSProps) => {
           {/* <Line type="monotone" dataKey="negative" stroke="#82ca9d" /> */}
 
           {/* <Line dataKey="negative" stroke="green" /> */}
-          <Line dataKey="positive" stroke="red" />
+          {/* <Line dataKey="positive" stroke="red" /> */}
           <Line dataKey="hospitalized" stroke="purple" />
           <Line dataKey="death" stroke="black" />
 
           <Line dataKey="hospitalizedIncrease" stroke="purple" />
           <Line dataKey="deathIncrease" stroke="purple" />
 
+          {Object.keys(dataKeys).map((key: string) => {
+            console.log(key)
+
+            const value = dataKeys[key]
+            console.log(value)
+            console.log(toHex(key))
+
+            const hexColor = toHex(key)
+            return value ? <Line dataKey={key} stroke={hexColor} /> : ''
+            // return <div>test</div>
+          })}
+
         </LineChart>
       </ResponsiveContainer>
 
       <div className={classes.formContainer}>
         <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">Assign responsibility</FormLabel>
+          <FormLabel component="legend">Cumulative</FormLabel>
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox name="gilad" />}
-              label="Gilad Gray"
+              control={<Checkbox name="allCumulative" />}
+              label="Select All"
             />
             <FormControlLabel
-              control={<Checkbox name="jason" />}
-              label="Jason Killian"
+              control={<Checkbox name="positive" onChange={e => handleCheck(e)} />}
+              label="Positive"
             />
             <FormControlLabel
-              control={<Checkbox name="antoine" />}
-              label="Antoine Llorca"
+              control={<Checkbox name="hospitalized" />}
+              label="Hospitalized"
+            />
+            <FormControlLabel
+              control={<Checkbox name="death" />}
+              label="Deaths"
             />
           </FormGroup>
-          <FormHelperText>Be careful</FormHelperText>
         </FormControl>
 
-        <FormControl required component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">Pick two</FormLabel>
+        <FormControl component="fieldset" className={classes.formControl}>
+          <FormLabel component="legend">Increases</FormLabel>
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox name="gilad" />}
-              label="Gilad Gray"
+              control={<Checkbox name="allIncreases" />}
+              label="Select All"
             />
             <FormControlLabel
-              control={<Checkbox name="jason" />}
-              label="Jason Killian"
+              control={<Checkbox name="positive" />}
+              label="Positive"
             />
             <FormControlLabel
-              control={<Checkbox name="antoine" />}
-              label="Antoine Llorca"
+              control={<Checkbox name="hospitalized" />}
+              label="Hospitalized"
+            />
+            <FormControlLabel
+              control={<Checkbox name="death" />}
+              label="Deaths"
             />
           </FormGroup>
-          <FormHelperText>You can display an error</FormHelperText>
+        </FormControl>
+
+        <FormControl component="fieldset" className={classes.formControl}>
+          <FormLabel component="legend">% Increases</FormLabel>
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox name="allPercent" />}
+              label="Select All"
+            />
+            <FormControlLabel
+              control={<Checkbox name="positive" />}
+              label="Positive"
+            />
+            <FormControlLabel
+              control={<Checkbox name="hospitalized" />}
+              label="Hospitalized"
+            />
+            <FormControlLabel
+              control={<Checkbox name="death" />}
+              label="Deaths"
+            />
+          </FormGroup>
         </FormControl>
       </div>
 

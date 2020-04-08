@@ -1,6 +1,7 @@
-import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import './App.css';
+import React from 'react'
+import { Helmet } from 'react-helmet'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import './App.css'
 
 import {
   BrowserRouter as Router,
@@ -9,8 +10,8 @@ import {
 } from 'react-router-dom'
 
 // https://material-ui.com/styles/advanced/#theming
-import { ThemeProvider } from '@material-ui/core/styles';
-import { makeStyles, createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles'
+import { makeStyles, createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles'
 
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -25,8 +26,8 @@ let theme = createMuiTheme({
       'Roboto',
     ].join(',')
   }
-});
-theme = responsiveFontSizes(theme);
+})
+theme = responsiveFontSizes(theme)
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -39,6 +40,11 @@ const App = (props: object) => {
 
   return (
     <div className={classes.root}>
+      {/* Dynamic Header Info: https://github.com/nfl/react-helmet */}
+      <Helmet>
+        <title>COVIDjs - COVID-19 Tracking Charts</title>
+        <meta name="description" content="COVID charts based on data from The COVID Tracking Project" />
+      </Helmet>
       <ThemeProvider theme={theme}>
         {/* https://material-ui.com/components/css-baseline/ */}
         <CssBaseline />
@@ -61,7 +67,7 @@ const App = (props: object) => {
         </Router>
       </ThemeProvider>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
