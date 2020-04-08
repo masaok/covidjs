@@ -97,7 +97,7 @@ interface DailyUSProps {
 
 interface DailyData {
   // https://stackoverflow.com/questions/55321867/the-error-of-duplicate-string-index-signature-at-reactjs-with-typescript
-  [placeholder: string]: number // allows for variable key access
+  [placeholder: string]: number // index signature allows for variable key access
 
   date: number
   states: number
@@ -135,7 +135,7 @@ interface DailyData {
 interface DailyDataList extends Array<DailyData> { }
 
 interface DataKeys {
-  [placeholder: string]: boolean // allows for variable key access
+  [placeholder: string]: boolean // index signature allows for variable key access
   positive: boolean
   positiveIncrease: boolean
   positiveIncreasePercent: boolean
